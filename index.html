@@ -18,7 +18,6 @@
 <body>
     <canvas id="heart"></canvas>
     <script>
-        // Your JavaScript code here
         window.requestAnimationFrame = 
             window.__requestAnimationFrame || 
             window.requestAnimationFrame || 
@@ -55,8 +54,8 @@
             var heartPosition = function (rad) {
                 return [Math.pow(Math.sin(rad), 3), -(15 * Math.cos(rad) - 5 * Math.cos(2 * rad) - 2 * Math.cos(3 * rad) - Math.cos(4 * rad))];
             };
-            var scaleAndTranslate = function (pos, sx, sy, dx, dy) {
-                return [dx + pos[0] * sx, dy + pos[1] * sy];
+            var scaleAndTranslate = function (pos, sx, sy) {
+                return [pos[0] * sx, pos[1] * sy];
             };
 
             window.addEventListener('resize', function () {
@@ -71,17 +70,17 @@
             var pointsOrigin = [];
             var i;
             var dr = window.isDevice ? 0.3 : 0.1;
-            for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 210, 13, width / 2, height / 2));
-            for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 150, 9, width / 2, height / 2));
-            for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 90, 5, width / 2, height / 2));
+            for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 210, 13));
+            for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 150, 9));
+            for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 90, 5));
             var heartPointsCount = pointsOrigin.length;
 
             var targetPoints = [];
             var pulse = function (kx, ky) {
                 for (i = 0; i < pointsOrigin.length; i++) {
                     targetPoints[i] = [];
-                    targetPoints[i][0] = kx * pointsOrigin[i][0];
-                    targetPoints[i][1] = ky * pointsOrigin[i][1];
+                    targetPoints[i][0] = kx * pointsOrigin[i][0] + width / 2 / window.devicePixelRatio;
+                    targetPoints[i][1] = ky * pointsOrigin[i][1] + height / 2 / window.devicePixelRatio;
                 }
             };
 
@@ -164,4 +163,5 @@
     </script>
 </body>
 </html>
+
 
