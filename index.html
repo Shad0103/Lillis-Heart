@@ -44,15 +44,12 @@
             loaded = true;
             var canvas = document.getElementById('heart');
             var ctx = canvas.getContext('2d');
-            var width = window.innerWidth;
-            var height = window.innerHeight;
-            var ratio = window.devicePixelRatio || 1;
-            canvas.width = width * ratio;
-            canvas.height = height * ratio;
-            ctx.scale(ratio, ratio);
-            ctx.fillStyle = "rgba(0,0,0,1)";
-            ctx.fillRect(0, 0, width, height);
+            var width = canvas.width = window.innerWidth * window.devicePixelRatio;
+            var height = canvas.height = window.innerHeight * window.devicePixelRatio;
             var rand = Math.random;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            ctx.fillStyle = "rgba(0,0,0,1)";
+            ctx.fillRect(0, 0, width / window.devicePixelRatio, height / window.devicePixelRatio);
 
             var heartPosition = function (rad) {
                 return [Math.pow(Math.sin(rad), 3), -(15 * Math.cos(rad) - 5 * Math.cos(2 * rad) - 2 * Math.cos(3 * rad) - Math.cos(4 * rad))];
@@ -62,13 +59,11 @@
             };
 
             window.addEventListener('resize', function () {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width * ratio;
-                canvas.height = height * ratio;
-                ctx.scale(ratio, ratio);
+                width = canvas.width = window.innerWidth * window.devicePixelRatio;
+                height = canvas.height = window.innerHeight * window.devicePixelRatio;
+                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
                 ctx.fillStyle = "rgba(0,0,0,1)";
-                ctx.fillRect(0, 0, width, height);
+                ctx.fillRect(0, 0, width / window.devicePixelRatio, height / window.devicePixelRatio);
             });
 
             var traceCount = window.isDevice ? 20 : 50;
@@ -84,8 +79,8 @@
             var pulse = function (kx, ky) {
                 for (i = 0; i < pointsOrigin.length; i++) {
                     targetPoints[i] = [];
-                    targetPoints[i][0] = kx * pointsOrigin[i][0] + width / 2;
-                    targetPoints[i][1] = ky * pointsOrigin[i][1] + height / 2;
+                    targetPoints[i][0] = kx * pointsOrigin[i][0] + width / 2 / window.devicePixelRatio;
+                    targetPoints[i][1] = ky * pointsOrigin[i][1] + height / 2 / window.devicePixelRatio;
                 }
             };
 
@@ -118,7 +113,7 @@
                 pulse((1 + n) * .5, (1 + n) * .5);
                 time += ((Math.sin(time)) < 0 ? 9 : (n > 0.8) ? .2 : 1) * config.timeDelta;
                 ctx.fillStyle = "rgba(0,0,0,.1)";
-                ctx.fillRect(0, 0, width, height);
+                ctx.fillRect(0, 0, width / window.devicePixelRatio, height / window.devicePixelRatio);
                 for (i = e.length; i--;) {
                     var u = e[i];
                     var q = targetPoints[u.q];
@@ -154,7 +149,7 @@
                     }
                     ctx.fillStyle = u.f;
                     for (k = 0; k < u.trace.length; k++) {
-                        ctx.fillRect(u.trace[k].x, u.trace[k].y, 1, 1);
+                        ctx.fillRect(u.trace[k].x / window.devicePixelRatio, u.trace[k].y / window.devicePixelRatio, 1, 1);
                     }
                 }
                 window.requestAnimationFrame(loop, canvas);
@@ -168,5 +163,6 @@
     </script>
 </body>
 </html>
+
 
 
